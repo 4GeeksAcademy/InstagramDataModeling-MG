@@ -1,37 +1,60 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, Float, Boolean
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy import create_engine
 from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
+class Contact(Base):
+    __tablename__ = 'Contact'
+    ContactID = Column(Integer, primary_key=True)
+    Name = Column(String(50), unique=True ,nullable=False)
+    Email = Column(String(50), unique=True ,nullable=False)
+    Address = Column(String(50))
+    Phone = Column(String(50))
+    Active = Column(Boolean)
 
-class Address(Base):
-    __tablename__ = 'address'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
-    id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+class Agenda(Base):
+    __tablename__ = 'Agenda'
+    AgendaID = Column(Integer, primary_key=True)
+    Active = Column(Boolean)
+    ContactID = Column(Integer, ForeignKey(Contact.ContactID))
+    C = relationship(Contact)
+
+class AddContact(Base):
+    __tablename__ = 'AddContact'
+    AddContactID = Column(Integer, primary_key=True)
+    Model = Column(String(50), nullable=False)
+    Type = Column(String(250))
+    ContactID = Column(Integer, ForeignKey(Contact.ContactID))
+    C = relationship(Contact)
+
+class EditContact(Base):
+    __tablename__ = 'EditContact'
+    EditContactID = Column(Integer, primary_key=True)
+    AgendaID = Column(Integer, ForeignKey(Agenda.AgendaID))
+    A = relationship(Agenda)
+    ContactID = Column(Integer, ForeignKey(Contact.ContactID))
+    C = relationship(Contact)
+
+class DeleteContact(Base):
+    __tablename__ = 'DeleteContact'
+    DeleteContactID = Column(Integer, primary_key=True)
+    AgendaID = Column(Integer, ForeignKey(Agenda.AgendaID))
+    A = relationship(Agenda)
+    ContactID = Column(Integer, ForeignKey(Contact.ContactID))
+    C = relationship(Contact)
+
+class DeleteAgenda(Base):
+    __tablename__ = 'DeleteAgenda'
+    DeleteAgendaID = Column(Integer, primary_key=True)
+    AgendaID = Column(Integer, ForeignKey(Agenda.AgendaID))
+    A = relationship(Agenda)
 
     def to_dict(self):
         return {}
 
 ## Draw from SQLAlchemy base
-try:
-    result = render_er(Base, 'diagram.png')
-    print("Success! Check the diagram.png file")
-except Exception as e:
-    print("There was a problem genering the diagram")
-    raise e
+render_er(Base, 'diagram.png')
