@@ -7,51 +7,51 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class Contact(Base):
-    __tablename__ = 'Contact'
-    ContactID = Column(Integer, primary_key=True)
-    Name = Column(String(50), unique=True ,nullable=False)
-    Email = Column(String(50), unique=True ,nullable=False)
-    Address = Column(String(50))
-    Phone = Column(String(50))
-    Active = Column(Boolean)
+class contact(Base):
+    __tablename__ = 'contact'
+    contact_id = Column(Integer, primary_key=True)
+    name = Column(String(50), unique=True ,nullable=False)
+    email = Column(String(50), unique=True ,nullable=False)
+    address = Column(String(50))
+    phone = Column(String(50))
+    active = Column(Boolean)
 
-class Agenda(Base):
-    __tablename__ = 'Agenda'
-    AgendaID = Column(Integer, primary_key=True)
-    Active = Column(Boolean)
-    ContactID = Column(Integer, ForeignKey(Contact.ContactID))
-    C = relationship(Contact)
+class agenda(Base):
+    __tablename__ = 'agenda'
+    agenda_id = Column(Integer, primary_key=True)
+    active = Column(Boolean)
+    contact_id = Column(Integer, ForeignKey(contact.contact_id))
+    contact_id = relationship(contact)
 
-class AddContact(Base):
-    __tablename__ = 'AddContact'
-    AddContactID = Column(Integer, primary_key=True)
-    Model = Column(String(50), nullable=False)
-    Type = Column(String(250))
-    ContactID = Column(Integer, ForeignKey(Contact.ContactID))
-    C = relationship(Contact)
+class add_contact(Base):
+    __tablename__ = 'add_contact'
+    add_contact_id = Column(Integer, primary_key=True)
+    model = Column(String(50), nullable=False)
+    type = Column(String(250))
+    contact_id = Column(Integer, ForeignKey(contact.contact_id))
+    contact_id = relationship(contact)
 
-class EditContact(Base):
-    __tablename__ = 'EditContact'
-    EditContactID = Column(Integer, primary_key=True)
-    AgendaID = Column(Integer, ForeignKey(Agenda.AgendaID))
-    A = relationship(Agenda)
-    ContactID = Column(Integer, ForeignKey(Contact.ContactID))
-    C = relationship(Contact)
+class edit_contact(Base):
+    __tablename__ = 'edit_contact'
+    edit_contact_id = Column(Integer, primary_key=True)
+    agenda_id = Column(Integer, ForeignKey(agenda.agenda_id))
+    agenda_id = relationship(agenda)
+    contact_id = Column(Integer, ForeignKey(contact.contact_id))
+    contact_id = relationship(contact)
 
-class DeleteContact(Base):
-    __tablename__ = 'DeleteContact'
-    DeleteContactID = Column(Integer, primary_key=True)
-    AgendaID = Column(Integer, ForeignKey(Agenda.AgendaID))
-    A = relationship(Agenda)
-    ContactID = Column(Integer, ForeignKey(Contact.ContactID))
-    C = relationship(Contact)
+class delete_contact(Base):
+    __tablename__ = 'delete_contact'
+    delete_contact_id = Column(Integer, primary_key=True)
+    agenda_id = Column(Integer, ForeignKey(agenda.agenda_id))
+    agenda_id = relationship(agenda)
+    contact_id = Column(Integer, ForeignKey(contact.contact_id))
+    contact_id = relationship(contact)
 
-class DeleteAgenda(Base):
-    __tablename__ = 'DeleteAgenda'
-    DeleteAgendaID = Column(Integer, primary_key=True)
-    AgendaID = Column(Integer, ForeignKey(Agenda.AgendaID))
-    A = relationship(Agenda)
+class delete_agenda(Base):
+    __tablename__ = 'delete_agenda'
+    delete_agenda_id = Column(Integer, primary_key=True)
+    agenda_id = Column(Integer, ForeignKey(agenda.agenda_id))
+    agenda_id = relationship(agenda)
 
     def to_dict(self):
         return {}
